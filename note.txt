@@ -1,0 +1,3 @@
+使用pipewire替代pulseaudio的方法：
+sudo apt remove pulseaudio-utils pulseaudio pulseaudio-module-bluetooth
+sudo apt install pipewire pipewire-pulse libspa-0.2-bluetooth pipewire-audio-client-libraries wireplumber

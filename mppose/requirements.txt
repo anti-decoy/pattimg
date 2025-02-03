@@ -1,0 +1,4 @@
+cv2filters
+# vcfilter
+numpy
+mediapipe
