@@ -218,6 +218,8 @@ def do_detect(mp_image: mp.Image, frame_tms):
 		return
 	face_detect_result = None
 
+	count_face = count_face + 1
+	print(now_time_str(), "# 检测到人脸信息%d次" % (count_face))
 	if count_face >= 360:
 		if (count_face - 360) % 10 == 0:
 			subprocess.call(["ffplay", "-nodisp", "-autoexit", str(get_script_path() / 'audio' / 'relax.mp3')])
