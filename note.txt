@@ -1,3 +1,18 @@
-使用pipewire替代pulseaudio的方法：
-sudo apt remove pulseaudio-utils pulseaudio pulseaudio-module-bluetooth
+使用pulseaudio的方法：
+sudo apt install pulseaudio-utils pulseaudio pulseaudio-module-bluetooth
+
+使用pipewire,缺点logout后会断开蓝牙，不太适合
 sudo apt install pipewire pipewire-pulse libspa-0.2-bluetooth pipewire-audio-client-libraries wireplumber
+
+
+树莓派蓝牙连接不上的处理方式：
+#!/bin/bash
+sudo ntpdate-debian
+pid=$(ps ax | grep hciattach | grep -v grep)
+if [ ! -z "$ps" ]; then
+        kill -9 "$pid"
+fi
+systemctl start hciuart
+sleep 5s
+bluetoothctl connect C0:16:AC:DD:FE:DE
+# pactl set-default-sink 1

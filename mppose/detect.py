@@ -102,9 +102,8 @@ def calc_degree(pose_a, pose_b):
 
 
 def isok_pose(pose_landmarks):
-	now = now_time_str()
 	if len(pose_landmarks) < 16:
-		print(now, "# 判断身体部位是否合理：关键部位不全")
+		print(now_time_str(), "# 判断身体部位是否合理：关键部位不全")
 		return False, ""
 	# right
 	shoulder = pose_landmarks[12]
@@ -114,23 +113,23 @@ def isok_pose(pose_landmarks):
 	"""
 	# 肩膀高于肘和手腕
 	if (shoulder.y > elbow.y) != (shoulder.y > wrist.y):
-		print(now, "# 判断身体部位是否合理：右侧高度不合理：shoulder.y=%f elbow.y=%f wrist.y=%f" % (shoulder.y, elbow.y, wrist.y))
+		print(now_time_str(), "# 判断身体部位是否合理：右侧高度不合理：shoulder.y=%f elbow.y=%f wrist.y=%f" % (shoulder.y, elbow.y, wrist.y))
 		return False, "Right shoulder pose is not high than elbow and wrist: shoulder.y=%f elbow.y=%f wrist.y=%f" % (shoulder.y, elbow.y, wrist.y)
 	"""
 	# 肩膀高于肘和手腕
 	if (shoulder.y > elbow.y):
-		print(now, "# 判断身体部位是否合理：右侧高度不合理：shoulder.y=%f elbow.y=%f " % (shoulder.y, elbow.y))
+		print(now_time_str(), "# 判断身体部位是否合理：右侧高度不合理：shoulder.y=%f elbow.y=%f " % (shoulder.y, elbow.y))
 		return False, "Right shoulder pose is not high than elbow: shoulder.y=%f elbow.y=%f" % (shoulder.y, elbow.y)
 
 	"""
 	# 肘在肩膀和手腕的同侧
 	if (elbow.x < shoulder.x) != (elbow.x < wrist.x):
-		print(now, "# 判断身体部位是否合理：右侧水平方向不合理：elbow.x=%f shoulder.x=%f wrist.x=%f" % (elbow.x, shoulder.x, wrist.x))
+		print(now_time_str(), "# 判断身体部位是否合理：右侧水平方向不合理：elbow.x=%f shoulder.x=%f wrist.x=%f" % (elbow.x, shoulder.x, wrist.x))
 		return False, "Right elbow pose is not right than shoulder and wrist: elbow.x=%f shoulder.x=%f wrist.x=%f" % (elbow.x, shoulder.x, wrist.x)
 	"""
 	# 右侧肘在肩膀右侧
 	if (elbow.x > shoulder.x):
-		print(now, "# 判断身体部位是否合理：右侧肘不在肩膀右侧：elbow.x=%f shoulder.x=%f" % (elbow.x, shoulder.x))
+		print(now_time_str(), "# 判断身体部位是否合理：右侧肘不在肩膀右侧：elbow.x=%f shoulder.x=%f" % (elbow.x, shoulder.x))
 		return False, "Right elbow pose is not right than shoulder: elbow.x=%f shoulder.x=%f" % (elbow.x, shoulder.x)
 
 	# left
@@ -141,26 +140,26 @@ def isok_pose(pose_landmarks):
 	"""
 	# 肩膀高于肘和手腕
 	if (shoulder.y > elbow.y) != (shoulder.y > wrist.y):
-		print(now, "# 判断身体部位是否合理：左侧高度不合理：shoulder.y=%f elbow.y=%f wrist.y=%f" % (shoulder.y, elbow.y, wrist.y))
+		print(now_time_str(), "# 判断身体部位是否合理：左侧高度不合理：shoulder.y=%f elbow.y=%f wrist.y=%f" % (shoulder.y, elbow.y, wrist.y))
 		return False, "Left shoulder pose is not high than elbow and wrist: shoulder.y=%f elbow.y=%f wrist.y=%f" % (shoulder.y, elbow.y, wrist.y)
 	"""
 	# 肩膀高于肘和手腕
 	if (shoulder.y > elbow.y):
-		print(now, "# 判断身体部位是否合理：左侧高度不合理：shoulder.y=%f elbow.y=%f " % (shoulder.y, elbow.y))
+		print(now_time_str(), "# 判断身体部位是否合理：左侧高度不合理：shoulder.y=%f elbow.y=%f " % (shoulder.y, elbow.y))
 		return False, "Left shoulder pose is not high than elbow: shoulder.y=%f elbow.y=%f" % (shoulder.y, elbow.y)
 
 	"""
 	# 肘在肩膀和手腕的同侧
 	if (elbow.x < shoulder.x) != (elbow.x < wrist.x):
-		print(now, "# 判断身体部位是否合理：左侧侧水平方向不合理：elbow.x=%f shoulder.x=%f wrist.x=%f" % (elbow.x, shoulder.x, wrist.x))
+		print(now_time_str(), "# 判断身体部位是否合理：左侧侧水平方向不合理：elbow.x=%f shoulder.x=%f wrist.x=%f" % (elbow.x, shoulder.x, wrist.x))
 		return False, "Left elbow pose is not left than shoulder and wrist: elbow.x=%f shoulder.x=%f wrist.x=%f" % (elbow.x, shoulder.x, wrist.x)
 	"""
 	# 左侧肘在肩膀左侧
 	if (elbow.x < shoulder.x):
-		print(now, "# 判断身体部位是否合理：左侧肘不在肩膀左侧：elbow.x=%f shoulder.x=%f" % (elbow.x, shoulder.x))
+		print(now_time_str(), "# 判断身体部位是否合理：左侧肘不在肩膀左侧：elbow.x=%f shoulder.x=%f" % (elbow.x, shoulder.x))
 		return False, "Left elbow pose is not left than shoulder: elbow.x=%f shoulder.x=%f" % (elbow.x, shoulder.x)
 
-	print(now, "# 判断身体部位是否合理：身体姿态合理")
+	print(now_time_str(), "# 判断身体部位是否合理：身体姿态合理")
 	return True, ""
 
 
@@ -168,19 +167,18 @@ count_shoulder = 0
 count_eye_shoulder = 0
 count_eye_elbow = 0
 count_no_person = 0
+count_face = 0
 
 pose_detector = None
 face_detector = None
 segmenter_detector = None
 object_detector = None
-alarm_max = 10
+alarm_max = 5
 
 
 def do_detect(mp_image: mp.Image, frame_tms):
-	global count_shoulder, count_eye_shoulder, count_eye_elbow, alarm_max, count_no_person
+	global count_shoulder, count_eye_shoulder, count_eye_elbow, alarm_max, count_no_person, count_face
 	global pose_detector, face_detector, segmenter_detector, object_detector
-
-	now = now_time_str()
 
 	print("++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 	object_detect_result = object_detector.detect_for_video(mp_image, frame_tms)
@@ -196,33 +194,39 @@ def do_detect(mp_image: mp.Image, frame_tms):
 		count_shoulder = 0
 		count_eye_elbow = 0
 		count_eye_shoulder = 0
+		count_face = 0
 		count_no_person = alarm_max
-		print(now, "# 没有检测人(%d)" % (count_no_person))
+		print(now_time_str(), "# 没有检测人(%d)" % (count_no_person))
 		return
 	if count_no_person > 0:
-		print(now, "# 检测到人出现(%d)" % (count_no_person))
+		print(now_time_str(), "# 检测到人出现(%d)" % (count_no_person))
 		count_no_person = count_no_person - 1
 	elif count_no_person == 0:
 		# set to -1, keep person exist
 		count_no_person = -1
-		print(now, "# 检测到人持续出现")
-		if in_time(6, 50, 9, 30) or in_time(17, 0, 18, 30):
-			subprocess.call(["ffplay", "-volume", "20", "-nodisp", "-autoexit", str(get_script_path() / 'audio' / 'mirror.mp3')])
+		print(now_time_str(), "# 检测到人持续出现")
+		if in_time(6, 50, 7, 30) or in_time(17, 0, 19, 00):
+			subprocess.call(["ffplay", "-volume", "40", "-nodisp", "-autoexit", str(get_script_path() / 'audio' / 'mirror.mp3')])
 
 	# 判断是否存在人脸
 	face_detect_result = face_detector.detect_for_video(mp_image, frame_tms)
 	if len(face_detect_result.detections) < 1:
-		print(now, "# 没有检测到人脸信息")
+		print(now_time_str(), "# 没有检测到人脸信息")
 		face_detect_result = None
 		mp_image = None
+		count_face = 0
 		return
 	face_detect_result = None
+
+	if count_face >= 360:
+		if (count_face - 360) % 10 == 0:
+			subprocess.call(["ffplay", "-nodisp", "-autoexit", str(get_script_path() / 'audio' / 'relax.mp3')])
 
 	pose_detect_result = pose_detector.detect_for_video(mp_image, frame_tms)
 
 	# 判断是否检测到人的关键部位
 	if len(pose_detect_result.pose_landmarks) < 1:
-		print(now, "# 没有检测到姿态信息")
+		print(now_time_str(), "# 没有检测到姿态信息")
 		pose_detect_result = None
 		mp_image = None
 		return
@@ -240,7 +244,7 @@ def do_detect(mp_image: mp.Image, frame_tms):
 		cv2.imwrite(str(img_path), annotated_image)
 		annotated_image = None
 		"""
-		print(now, "# 姿态信息中的关键部位位置不合理", pose_detail)
+		print(now_time_str(), "# 姿态信息中的关键部位位置不合理", pose_detail)
 		pose_detect_result = None
 		mp_image = None
 		return
@@ -253,37 +257,37 @@ def do_detect(mp_image: mp.Image, frame_tms):
 	shoulder_degree = calc_degree(pose_landmarks[12], pose_landmarks[11])
 	if shoulder_degree > 15.0:
 		count_shoulder = count_shoulder + 1
-		print(now, "! 肩膀倾斜度数%d，第%d次" % (int(shoulder_degree), count_shoulder))
+		print(now_time_str(), "! 肩膀倾斜度数%d，第%d次" % (int(shoulder_degree), count_shoulder))
 		if count_shoulder >= alarm_max:
-			print(now, "! 肩膀倾斜告警，已达到%d次" % (count_shoulder))
+			print(now_time_str(), "! 肩膀倾斜告警，已达到%d次" % (count_shoulder))
 			count_shoulder = 0
-			img_path = get_script_path() / 'imgs' / Path(now + '.jpg')
+			img_path = get_script_path() / 'imgs' / Path(now_time_str() + '.jpg')
 			annotated_image = draw_landmarks_on_image(mp_image, pose_detect_result)
-			draw_text_on_image(annotated_image, "%s Shoulder degree %d" % (now, shoulder_degree))
+			draw_text_on_image(annotated_image, "%s Shoulder degree %d" % (now_time_str(), shoulder_degree))
 			cv2.imwrite(str(img_path), annotated_image)
 			annotated_image = None
-			subprocess.call(["ffplay", "-volume", "20", "-nodisp", "-autoexit", str(get_script_path() / 'audio' / 'shoulder.mp3')])
+			subprocess.call(["ffplay", "-volume", "40", "-nodisp", "-autoexit", str(get_script_path() / 'audio' / 'shoulder.mp3')])
 	else:
 		count_shoulder = 0
-	print(now, "# 肩膀倾斜度数", int(shoulder_degree))
+	print(now_time_str(), "# 肩膀倾斜度数", int(shoulder_degree))
 
 	"""
 	right_eye_shoulder_degree = calc_degree(pose_landmarks[12], pose_landmarks[6])
 	if right_eye_shoulder_degree < 60.0:
 		count_eye_shoulder = count_eye_shoulder + 1
-		print(now, "! 低头，眼肩度数%d），第%d次" % (int(right_eye_shoulder_degree), count_eye_shoulder))
+		print(now_time_str(), "! 低头，眼肩度数%d），第%d次" % (int(right_eye_shoulder_degree), count_eye_shoulder))
 		if count_eye_shoulder >= alarm_max:
-			print(now, "! 低头告警，已达到%d次" % (count_eye_shoulder))
+			print(now_time_str(), "! 低头告警，已达到%d次" % (count_eye_shoulder))
 			count_eye_shoulder = 0
-			img_path = get_script_path() / 'imgs' / Path(now + '.jpg')
+			img_path = get_script_path() / 'imgs' / Path(now_time_str() + '.jpg')
 			annotated_image = draw_landmarks_on_image(mp_image, pose_detect_result);
-			draw_text_on_image(annotated_image, now + " Right eye and shoulder degree")
+			draw_text_on_image(annotated_image, now_time_str() + " Right eye and shoulder degree")
 			cv2.imwrite(str(img_path), annotated_image)
 			annotated_image = None
 			subprocess.call(["ffplay", "-nodisp", "-autoexit", str(get_script_path() / 'audio' / 'eye.mp3')])
 	else:
 		count_eye_shoulder = 0
-	print(now, "# 右眼肩度数", int(right_eye_shoulder_degree))
+	print(now_time_str(), "# 右眼肩度数", int(right_eye_shoulder_degree))
 	"""
 
 	if len(pose_landmarks) < 15:
@@ -295,19 +299,19 @@ def do_detect(mp_image: mp.Image, frame_tms):
 	# if right_eye_elbow_degree < 50.0 and left_eye_elbow_degree < 50.0:
 	if (right_eye_elbow_degree + left_eye_elbow_degree < 115.0) or (right_eye_elbow_degree < 60.0):
 		count_eye_elbow = count_eye_elbow + 1
-		print(now, "! 低头，眼肘度数(L%d，R%d)，第%d次" % (int(left_eye_elbow_degree), int(right_eye_elbow_degree), count_eye_elbow))
+		print(now_time_str(), "! 低头，眼肘度数(L%d，R%d)，第%d次" % (int(left_eye_elbow_degree), int(right_eye_elbow_degree), count_eye_elbow))
 		if count_eye_elbow >= alarm_max:
-			print(now, "! 低头告警，已达到%d次" % (count_eye_shoulder))
+			print(now_time_str(), "! 低头告警，已达到%d次" % (count_eye_shoulder))
 			count_eye_elbow = 0
-			img_path = get_script_path() / 'imgs' / Path(now + '.jpg')
+			img_path = get_script_path() / 'imgs' / Path(now_time_str() + '.jpg')
 			annotated_image = draw_landmarks_on_image(mp_image, pose_detect_result)
-			draw_text_on_image(annotated_image, "%s Right eye elbow degree(L:%d, R:%d)" % (now, int(left_eye_elbow_degree), int(right_eye_elbow_degree)))
+			draw_text_on_image(annotated_image, "%s Right eye elbow degree(L:%d, R:%d)" % (now_time_str(), int(left_eye_elbow_degree), int(right_eye_elbow_degree)))
 			cv2.imwrite(str(img_path), annotated_image)
 			annotated_image = None
-			subprocess.call(["ffplay", "-volume", "20", "-nodisp", "-autoexit", str(get_script_path() / 'audio' / 'eye.mp3')])
+			subprocess.call(["ffplay", "-volume", "40", "-nodisp", "-autoexit", str(get_script_path() / 'audio' / 'eye.mp3')])
 	else:
 		count_eye_elbow = 0
-	print("%s# 眼肘度数(L:%d, R:%d)" % (now, int(left_eye_elbow_degree), int(right_eye_elbow_degree)))
+	print("%s# 眼肘度数(L:%d, R:%d)" % (now_time_str(), int(left_eye_elbow_degree), int(right_eye_elbow_degree)))
 
 	pose_detect_result = None
 	mp_image = None
