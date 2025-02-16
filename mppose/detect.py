@@ -166,8 +166,7 @@ def isok_pose(pose_landmarks):
 count_shoulder = 0
 count_eye_shoulder = 0
 count_eye_elbow = 0
-count_no_person = 0
-count_face = 0
+count_person = 0
 
 pose_detector = None
 face_detector = None
@@ -177,7 +176,7 @@ alarm_max = 5
 
 
 def do_detect(mp_image: mp.Image, frame_tms):
-	global count_shoulder, count_eye_shoulder, count_eye_elbow, alarm_max, count_no_person, count_face
+	global count_shoulder, count_eye_shoulder, count_eye_elbow, alarm_max, count_person
 	global pose_detector, face_detector, segmenter_detector, object_detector
 
 	print("++++++++++++++++++++++++++++++++++++++++++++++++++++++")
@@ -194,19 +193,23 @@ def do_detect(mp_image: mp.Image, frame_tms):
 		count_shoulder = 0
 		count_eye_elbow = 0
 		count_eye_shoulder = 0
-		count_face = 0
-		count_no_person = alarm_max
-		print(now_time_str(), "# 没有检测人(%d)" % (count_no_person))
+		count_person = 0
+		print(now_time_str(), "# 没有检测人")
 		return
-	if count_no_person > 0:
-		print(now_time_str(), "# 检测到人出现(%d)" % (count_no_person))
-		count_no_person = count_no_person - 1
-	elif count_no_person == 0:
-		# set to -1, keep person exist
-		count_no_person = -1
-		print(now_time_str(), "# 检测到人持续出现")
-		if in_time(6, 50, 7, 30) or in_time(17, 0, 19, 00):
-			subprocess.call(["ffplay", "-volume", "40", "-nodisp", "-autoexit", str(get_script_path() / 'audio' / 'mirror.mp3')])
+
+	# 检测到人，计数，用于久坐提醒
+	count_person = count_person + 1
+	print(now_time_str(), "# 检测到人出现(%d)" % (count_person))
+	if count_person >= 360:
+		if (count_person - 360) % 10 == 0:
+			subprocess.call(["ffplay", "-nodisp", "-autoexit", str(get_script_path() / 'audio' / 'relax.mp3')])
+
+	if count_person >= 3 and count_person <= 21:
+		if count_person % 3 == 0:
+			if in_time(6, 50, 7, 30) or in_time(17, 0, 19, 00):
+				subprocess.call(["ffplay", "-volume", "40", "-nodisp", "-autoexit", str(get_script_path() / 'audio' / 'mirror.mp3')])
+
+	
 
 	# 判断是否存在人脸
 	face_detect_result = face_detector.detect_for_video(mp_image, frame_tms)
@@ -214,15 +217,8 @@ def do_detect(mp_image: mp.Image, frame_tms):
 		print(now_time_str(), "# 没有检测到人脸信息")
 		face_detect_result = None
 		mp_image = None
-		count_face = 0
 		return
 	face_detect_result = None
-
-	count_face = count_face + 1
-	print(now_time_str(), "# 检测到人脸信息%d次" % (count_face))
-	if count_face >= 360:
-		if (count_face - 360) % 10 == 0:
-			subprocess.call(["ffplay", "-nodisp", "-autoexit", str(get_script_path() / 'audio' / 'relax.mp3')])
 
 	pose_detect_result = pose_detector.detect_for_video(mp_image, frame_tms)
 
