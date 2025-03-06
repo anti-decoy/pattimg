@@ -172,11 +172,19 @@ pose_detector = None
 face_detector = None
 segmenter_detector = None
 object_detector = None
-alarm_max = 5
+alarm_max = 3
+volume = 80
+
+def play_audio(audio_path):
+	global volume
+	vol = volume
+	if in_time(0, 0, 6, 30):
+		vol = volume / 5
+	subprocess.call(["ffplay", "-volume", str(vol), "-nodisp", "-autoexit", str(audio_path)])
 
 
 def do_detect(mp_image: mp.Image, frame_tms):
-	global count_shoulder, count_eye_shoulder, count_eye_elbow, alarm_max, count_person
+	global count_shoulder, count_eye_shoulder, count_eye_elbow, alarm_max, count_person, volume
 	global pose_detector, face_detector, segmenter_detector, object_detector
 
 	print("++++++++++++++++++++++++++++++++++++++++++++++++++++++")
@@ -202,14 +210,11 @@ def do_detect(mp_image: mp.Image, frame_tms):
 	print(now_time_str(), "# 检测到人出现(%d)" % (count_person))
 	if count_person >= 360:
 		if (count_person - 360) % 10 == 0:
-			subprocess.call(["ffplay", "-nodisp", "-autoexit", str(get_script_path() / 'audio' / 'relax.mp3')])
+			play_audio(get_script_path() / 'audio' / 'relax.mp3')
 
-	if count_person >= 3 and count_person <= 21:
-		if count_person % 3 == 0:
-			if in_time(6, 50, 7, 30) or in_time(17, 0, 19, 00):
-				subprocess.call(["ffplay", "-volume", "40", "-nodisp", "-autoexit", str(get_script_path() / 'audio' / 'mirror.mp3')])
-
-	
+	if count_person == 3 or count_person == 13:
+		if in_time(6, 50, 7, 30) or in_time(17, 0, 19, 00):
+			play_audio(get_script_path() / 'audio' / 'mirror.mp3')
 
 	# 判断是否存在人脸
 	face_detect_result = face_detector.detect_for_video(mp_image, frame_tms)
@@ -264,7 +269,7 @@ def do_detect(mp_image: mp.Image, frame_tms):
 			draw_text_on_image(annotated_image, "%s Shoulder degree %d" % (now_time_str(), shoulder_degree))
 			cv2.imwrite(str(img_path), annotated_image)
 			annotated_image = None
-			subprocess.call(["ffplay", "-volume", "40", "-nodisp", "-autoexit", str(get_script_path() / 'audio' / 'shoulder.mp3')])
+			play_audio(get_script_path() / 'audio' / 'shoulder.mp3')
 	else:
 		count_shoulder = 0
 	print(now_time_str(), "# 肩膀倾斜度数", int(shoulder_degree))
@@ -282,7 +287,7 @@ def do_detect(mp_image: mp.Image, frame_tms):
 			draw_text_on_image(annotated_image, now_time_str() + " Right eye and shoulder degree")
 			cv2.imwrite(str(img_path), annotated_image)
 			annotated_image = None
-			subprocess.call(["ffplay", "-nodisp", "-autoexit", str(get_script_path() / 'audio' / 'eye.mp3')])
+			play_audio(get_script_path() / 'audio' / 'eye.mp3')
 	else:
 		count_eye_shoulder = 0
 	print(now_time_str(), "# 右眼肩度数", int(right_eye_shoulder_degree))
@@ -295,7 +300,7 @@ def do_detect(mp_image: mp.Image, frame_tms):
 	right_eye_elbow_degree = calc_degree(pose_landmarks[14], pose_landmarks[6])
 	left_eye_elbow_degree = calc_degree(pose_landmarks[13], pose_landmarks[3])
 	# if right_eye_elbow_degree < 50.0 and left_eye_elbow_degree < 50.0:
-	if (right_eye_elbow_degree + left_eye_elbow_degree < 115.0) or (right_eye_elbow_degree < 60.0):
+	if (right_eye_elbow_degree + left_eye_elbow_degree < 120.0) or (right_eye_elbow_degree < 60.0):
 		count_eye_elbow = count_eye_elbow + 1
 		print(now_time_str(), "! 低头，眼肘度数(L%d，R%d)，第%d次" % (int(left_eye_elbow_degree), int(right_eye_elbow_degree), count_eye_elbow))
 		if count_eye_elbow >= alarm_max:
@@ -306,7 +311,7 @@ def do_detect(mp_image: mp.Image, frame_tms):
 			draw_text_on_image(annotated_image, "%s Right eye elbow degree(L:%d, R:%d)" % (now_time_str(), int(left_eye_elbow_degree), int(right_eye_elbow_degree)))
 			cv2.imwrite(str(img_path), annotated_image)
 			annotated_image = None
-			subprocess.call(["ffplay", "-volume", "40", "-nodisp", "-autoexit", str(get_script_path() / 'audio' / 'eye.mp3')])
+			play_audio(get_script_path() / 'audio' / 'eye.mp3')
 	else:
 		count_eye_elbow = 0
 	print("%s# 眼肘度数(L:%d, R:%d)" % (now_time_str(), int(left_eye_elbow_degree), int(right_eye_elbow_degree)))
